@@ -7,7 +7,7 @@ import {
   Post,
   Res,
 } from "@nestjs/common";
-import { Response } from "express";
+import { FastifyReply } from "fastify";
 import { CreateLinkDto } from "./dto/create-link.dto";
 import { LinksService } from "./links.service";
 
@@ -21,9 +21,9 @@ export class LinksController {
   }
 
   @Get(":url")
-  findOne(@Param("url") url: string, @Res() response: Response) {
+  findOne(@Param("url") url: string, @Res() response: FastifyReply) {
     const link = this.linksService.findOne(url);
 
-    return response.redirect(HttpStatus.MOVED_PERMANENTLY, link.longUrl);
+    return response.status(HttpStatus.MOVED_PERMANENTLY).redirect(link.longUrl);
   }
 }
